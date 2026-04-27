@@ -1,3 +1,4 @@
+// src/pages/Login.jsx
 import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,9 +16,9 @@ const validationRules = {
 };
 
 export default function Login() {
-    const { search } = useLocation();
     const { error, loading, login } = useAuth();
     const navigate = useNavigate();
+    const { search } = useLocation();
 
     const methods = useForm({
         defaultValues: {
@@ -25,7 +26,6 @@ export default function Login() {
             password: '12345678',
         },
     });
-
     const { handleSubmit, reset } = methods;
 
     const handleCancel = useCallback(() => {
@@ -35,9 +35,7 @@ export default function Login() {
     const handleLogin = useCallback(
         async ({ email, password }) => {
             const loggedIn = await login(email, password);
-
             if (loggedIn) {
-                // Redirect to the page the user was on before logging in, if present in the URL
                 const params = new URLSearchParams(search);
                 navigate({
                     pathname: params.get('redirect') || '/',
@@ -50,7 +48,7 @@ export default function Login() {
 
     return (
         <FormProvider {...methods}>
-            <div className='container'>
+            <div className='w-full max-w-md'>
                 <form
                     className='d-flex flex-column'
                     onSubmit={handleSubmit(handleLogin)}
@@ -63,6 +61,7 @@ export default function Login() {
                         name='email'
                         placeholder='your@email.com'
                         validationRules={validationRules.email}
+                        data-cy='email_input'
                     />
                     <LabelInput
                         label='password'
@@ -70,22 +69,22 @@ export default function Login() {
                         placeholder='password'
                         name='password'
                         validationRules={validationRules.password}
+                        data-cy='password_input'
                     />
                     <div className='flex justify-end'>
                         <button
                             type='submit'
                             className='primary'
                             disabled={loading}
+                            data-cy='submit_btn'
                         >
                             Sign in
                         </button>
-
                         <button
                             type='button'
                             className='secondary ml-2'
                             onClick={handleCancel}
                         >
-
                             Cancel
                         </button>
                     </div>

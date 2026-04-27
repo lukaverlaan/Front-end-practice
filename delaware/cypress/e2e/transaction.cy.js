@@ -1,4 +1,8 @@
 describe('Transactions list', () => {
+  beforeEach(() => {
+    cy.login('pieter.vanderhelst@hogent.be', '12345678');
+  });
+
   it('should show the transactions', () => {
     cy.intercept(
       'GET',
@@ -7,7 +11,7 @@ describe('Transactions list', () => {
     );
 
     cy.visit('http://localhost:5173');
-    cy.get('[data-cy=transaction]').should('have.length', 2); 
+    cy.get('[data-cy=transaction]').should('have.length', 2);
     cy.get('[data-cy=transaction_place]').eq(0).contains('Chinees Restaurant');
     cy.get('[data-cy=transaction_date]').eq(0).should('contain', '01/10/2025');
   });
@@ -20,11 +24,11 @@ describe('Transactions list', () => {
           res.setDelay(1000);
         });
       },
-    ).as('slowResponse'); 
-    cy.visit('http://localhost:5173'); 
-    cy.get('[data-cy=loader]').should('be.visible'); 
-    cy.wait('@slowResponse'); 
-    cy.get('[data-cy=loader]').should('not.exist'); 
+    ).as('slowResponse');
+    cy.visit('http://localhost:5173');
+    cy.get('[data-cy=loader]').should('be.visible');
+    cy.wait('@slowResponse');
+    cy.get('[data-cy=loader]').should('not.exist');
   });
 
   it('should show all transactions for the Irish pub', () => {
@@ -32,7 +36,7 @@ describe('Transactions list', () => {
     cy.intercept(
       'GET',
       'http://localhost:3000/api/transactions',
-      { fixture: 'transactions.json' }, // 👈
+      { fixture: 'transactions.json' },
     );
     cy.get('[data-cy=transactions_search_input]').type('Ir');
     cy.get('[data-cy=transactions_search_btn]').click();
