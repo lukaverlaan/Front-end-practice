@@ -7,6 +7,8 @@ import TransactionList from './pages/transactions/TransactionsList.jsx';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.jsx'
 import PlacesList from './pages/places/PlacesList.jsx';
 import PlaceDetail from './pages/places/PlaceDetail.jsx';
+import SitesList from './pages/sites/SitesList.jsx';
+import SiteDetail from './pages/sites/SiteDetail.jsx';
 import NotFound from './pages/NotFound.jsx';
 import About, { Services, History, Location } from './pages/about/About.jsx';
 import Layout from './pages/Layout.jsx';
@@ -49,6 +51,20 @@ const router = createBrowserRouter([
           {
             path: 'edit/:id',
             Component: AddOrEditTransaction,
+          },
+        ],
+      },
+      {
+        path: 'sites',
+        Component: PrivateRoute,
+        children: [
+          {
+            index: true,
+            Component: SitesList,
+          },
+          {
+            path: ':id',
+            Component: SiteDetail,
           },
         ],
       },

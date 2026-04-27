@@ -74,6 +74,7 @@ export default function Navbar() {
                 <ul className="hidden absolute top-1/2 left-1/2
         transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
                     <NavItem to="/transactions">Transactions</NavItem>
+                    <NavItem to="/sites">Sites</NavItem>
                     <NavItem to="/places">Places</NavItem>
                     <NavItem to="/about">About</NavItem>
                 </ul>
@@ -102,6 +103,7 @@ export default function Navbar() {
                     <div>
                         <ul>
                             <NavItem to="/transactions" options="block p-4 text-sm font-semibold">Transactions</NavItem>
+                            <NavItem to="/sites" options="block p-4 text-sm font-semibold">Sites</NavItem>
                             <NavItem to="/places" options="block p-4 text-sm font-semibold">Places</NavItem>
                             <NavItem to="/about" options="block p-4 text-sm font-semibold">About</NavItem>
 
