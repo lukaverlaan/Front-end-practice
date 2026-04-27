@@ -1,14 +1,18 @@
-import { StrictMode } from 'react'
+import { StrictMode, createContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navigate } from 'react-router';
 import TransactionList from './pages/transactions/TransactionsList.jsx';
+import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.jsx'
 import PlacesList from './pages/places/PlacesList.jsx';
 import PlaceDetail from './pages/places/PlaceDetail.jsx';
 import NotFound from './pages/NotFound.jsx';
 import About, { Services, History, Location } from './pages/about/About.jsx';
 import Layout from './pages/Layout.jsx';
+import ThemeProvider from './contexts/Theme.context';
+
+export const ThemeContext = createContext();
 
 const router = createBrowserRouter([
   {
@@ -18,7 +22,23 @@ const router = createBrowserRouter([
         path: '/',
         element: <Navigate replace to='/transactions' />,
       },
-      { path: 'transactions', element: <TransactionList /> },
+      {
+        path: '/transactions',
+        children: [
+          {
+            index: true,
+            Component: TransactionList,
+          },
+          {
+            path: 'add',
+            Component: AddOrEditTransaction,
+          },
+          {
+            path: 'edit/:id',
+            Component: AddOrEditTransaction,
+          },
+        ],
+      },
       {
         path: 'places',
         children: [
@@ -60,6 +80,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 );

@@ -1,11 +1,13 @@
+import { memo } from 'react';
 import StarRating from './StarRating';
-import { IoTrashOutline } from 'react-icons/io5';
 import { Link } from 'react-router';
 
-const Place = ({ id, name, rating, onDelete, onRate }) => {
+const MemoizedPlace = memo(function Place({ id, name, rating, onDelete, onRate }) {
+
     const handleRate = (newRating) => {
-        onRate(id, newRating);
+        onRate({ id, name, rating: newRating });
     };
+
     const handleDelete = () => {
         onDelete(id);
     };
@@ -16,11 +18,9 @@ const Place = ({ id, name, rating, onDelete, onRate }) => {
                 <Link className="text-blue-600 underline" to={`/places/${id}`}>{name}</Link>
             </h5>
             <StarRating selectedStars={rating} onRate={handleRate} />
-            <button className='mt-6 py-2 px-2.5 rounded-md bg-blue-600 text-white' onClick={handleDelete}>
-                <IoTrashOutline />
-            </button>
+            <button className='mt-6 py-2 px-2.5 rounded-md bg-blue-600 text-white' onClick={handleDelete}>Verwijder</button>
         </div>
     );
-};
+});
 
-export default Place;
+export default MemoizedPlace;

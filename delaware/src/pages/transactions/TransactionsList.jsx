@@ -1,47 +1,75 @@
-import { useState, useMemo, useEffect } from 'react';
-import TransactionTable from '../../components/transactions/TransactionTable';
-import { TRANSACTION_DATA } from '../../api/mock_data';
-import * as transactionsApi from '../../api/transactions';
+import { useState, useMemo, useCallback } from 'react';
+import TransactionsTable from '../../components/transactions/TransactionsTable';
+import AsyncData from '../../components/AsyncData';
+import useSWR from 'swr';
+import { getAll, deleteById } from '../../api';
+import useSWRMutation from 'swr/mutation';
+import { Link } from 'react-router';
 
-export default function TransactionsList() {
+export default function TransactionList() {
+
     const [text, setText] = useState('');
     const [search, setSearch] = useState('');
 
-    const filteredTransactions = useMemo(() => TRANSACTION_DATA.filter((t) => {
-        return t.place.name.toLowerCase().includes(search.toLowerCase());
-    }), [search]);
+    const {
+        data: transactions = [],
+        isLoading,
+        error,
+    } = useSWR('transactions', getAll);
 
-    useEffect(() => {
-        const fetchTransactions = async () => {
-            const data = await transactionsApi.getAll();
-            console.log(data);
-        };
+    const { trigger: deleteTransaction, error: deleteError } = useSWRMutation(
+        'transactions',
+        deleteById,
+    );
 
-        fetchTransactions();
-    }, []);
+    const filteredTransactions = useMemo(
+        () =>
+            transactions.filter((t) => {
+                return t.place.name.toLowerCase().includes(search.toLowerCase());
+            }),
+        [search, transactions],
+    );
+
+    const handleDeleteTransaction = useCallback(
+        async (id) => {
+            await deleteTransaction(id);
+            alert('Transaction is removed');
+        },
+        [deleteTransaction],
+    );
 
     return (
         <>
-            <h1 className="text-4xl mb-4">Transactions</h1>
-            <div className='flex mb-3 w-1/2 gap-2 mx-4'>
-                <input
-                    type='search'
-                    id='search'
-                    className='rounded grow bg-white p-1 text-gray-900 placeholder:text-gray-400 outline-1 outline-gray-300
-          focus:outline-gray-600'
-                    placeholder='Search'
-                    value={text}
-                    onChange={(e) => {
-                        setText(e.target.value);
-                    }}
-                />
-                <button type='button' className='py-2 px-2.5 rounded-md text-blue-600 border border-blue-600' onClick={() => {
-                    setSearch(text);
-                }}>
-                    Search
-                </button>
+            <h1>Transactions</h1>
+            <div className='flex justify-between mb-3 gap-2'>
+                <div className="w-1/2 flex gap-2">
+                    <input
+                        type='search'
+                        id='search'
+                        className='flex-1 rounded bg-white p-1 text-gray-900 placeholder:text-gray-400 outline-1 outline-gray-300
+          focus:outline-blue-600'
+                        placeholder='Search'
+                        value={text}
+                        onChange={(e) => {
+                            setText(e.target.value);
+                        }}
+                        data-cy='transactions_search_input'
+                    />
+                    <button type='button' className='secondary' onClick={() => {
+                        setSearch(text);
+                    }} data-cy='transactions_search_btn'>
+                        Search
+                    </button>
+                </div>
+                <Link to='/transactions/add' className='primary'>
+                    Add transaction
+                </Link>
             </div>
-            <TransactionTable transactions={filteredTransactions} />
+            <div className='mt-4'>
+                <AsyncData loading={isLoading} error={error || deleteError}>
+                    <TransactionsTable transactions={filteredTransactions} onDelete={handleDeleteTransaction} />
+                </AsyncData>
+            </div>
         </>
     );
 }
