@@ -1,23 +1,60 @@
 import { memo } from 'react';
 import { Link } from 'react-router';
+import StatusBadge from '../../components/StatusBadge';
 
-const MemoizedSite = memo(function Site({ id, naam, capaciteit, locatie, operationele_status, productie_status }) {
+const MemoizedSite = memo(function Site({
+    id,
+    naam,
+    capaciteit,
+    locatie,
+    operationeleStatus,
+    productieStatus
+}) {
+
+    const capacityPercent = Math.min((capaciteit / 200) * 100, 100);
 
     return (
-        <div className="p-3 outline outline-black/5 rounded-md shadow-lg mb-4">
-            <h5 className="text-xl font-medium mb-2">
-                <Link className="text-blue-600 underline" to={`/sites/${id}`}>
-                    {naam}
-                </Link>
-            </h5>
+        <Link to={`/sites/${id}`} className="block group">
+            <div className="
+                rounded-2xl p-5 
+                bg-linear-to-br from-white/5 to-white/2
+                backdrop-blur
+                border border-white/10
+                hover:border-(--primary)
+                transition-all duration-300
+                hover:-translate-y-1 hover:shadow-2xl
+            ">
 
-            <div className="text-sm mb-2">
-                <p><strong>Locatie:</strong> {locatie}</p>
-                <p><strong>Capaciteit:</strong> {capaciteit}</p>
-                <p><strong>Operationele status:</strong> {operationele_status}</p>
-                <p><strong>Productie status:</strong> {productie_status}</p>
+                <h2 className="text-lg font-semibold mb-1 group-hover:text-(--primary) transition">
+                    {naam}
+                </h2>
+
+                <p className="text-sm text-gray-400 mb-4">
+                    {locatie}
+                </p>
+
+                <div className="mb-4">
+                    <div className="flex justify-between text-xs mb-1 text-gray-400">
+                        <span>Capaciteit</span>
+                        <span>{capaciteit}</span>
+                    </div>
+
+                    <div className="h-2 bg-gray-700/50 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-red-400 transition-all duration-500"
+                            style={{ width: `${capacityPercent}%` }}
+                        />
+                    </div>
+                </div>
+
+                {/* Status */}
+                <div className="flex justify-between items-center">
+                    <StatusBadge value={operationeleStatus} />
+                    <StatusBadge value={productieStatus} />
+                </div>
+
             </div>
-        </div>
+        </Link>
     );
 });
 

@@ -3,14 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navigate } from 'react-router';
-import TransactionList from './pages/transactions/TransactionsList.jsx';
-import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.jsx'
-import PlacesList from './pages/places/PlacesList.jsx';
-import PlaceDetail from './pages/places/PlaceDetail.jsx';
 import SitesList from './pages/sites/SitesList.jsx';
 import SiteDetail from './pages/sites/SiteDetail.jsx';
+import UsersList from './pages/users/UsersList.jsx';
+import UserDetail from './pages/users/UserDetail.jsx';
 import NotFound from './pages/NotFound.jsx';
-import About, { Services, History, Location } from './pages/about/About.jsx';
 import Layout from './pages/Layout.jsx';
 import ThemeProvider from './contexts/Theme.context';
 import { AuthProvider } from './contexts/Auth.context';
@@ -26,7 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Navigate replace to='/transactions' />,
+        element: <Navigate replace to='/sites' />,
       },
       {
         path: '/login',
@@ -37,20 +34,16 @@ const router = createBrowserRouter([
         Component: Logout,
       },
       {
-        path: '/transactions',
+        path: 'gebruikers',
         Component: PrivateRoute,
         children: [
           {
             index: true,
-            Component: TransactionList,
+            Component: UsersList,
           },
           {
-            path: 'add',
-            Component: AddOrEditTransaction,
-          },
-          {
-            path: 'edit/:id',
-            Component: AddOrEditTransaction,
+            path: ':id',
+            Component: UserDetail,
           },
         ],
       },
@@ -67,42 +60,6 @@ const router = createBrowserRouter([
             Component: SiteDetail,
           },
         ],
-      },
-      {
-        path: 'places',
-        Component: PrivateRoute,
-        children: [
-          {
-            index: true,
-            Component: PlacesList,
-          },
-          {
-            path: ':id',
-            Component: PlaceDetail,
-          },
-        ],
-      },
-      {
-        path: 'about',
-        Component: About,
-        children: [
-          {
-            path: 'services',
-            Component: Services,
-          },
-          {
-            path: 'history',
-            Component: History,
-          },
-          {
-            path: 'location',
-            Component: Location,
-          },
-        ],
-      },
-      {
-        path: 'services',
-        element: <Navigate to='/about/services' replace />,
       },
       { path: '*', element: <NotFound /> },
     ],

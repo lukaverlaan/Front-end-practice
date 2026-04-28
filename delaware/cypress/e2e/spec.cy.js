@@ -4,6 +4,6 @@ describe('General', () => {
     cy.get('h1').should('exist');
   });
   it('should login', () => {
-    cy.login('pieter.vanderhelst@hogent.be', '12345678');
+    cy.login('admin@delaware.pro', 'Admin123*');
   });
 });

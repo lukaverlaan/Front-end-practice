@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         data: user,
         loading: userLoading,
         error: userError,
-    } = useSWR(token ? 'users/me' : null, api.getById);
+    } = useSWR(token ? 'gebruikers/me' : null, api.getById);
 
     const {
         trigger: doLogin,
@@ -27,12 +27,13 @@ export const AuthProvider = ({ children }) => {
         async (email, password) => {
             try {
                 const { token } = await doLogin({
-                    email,
-                    password,
+                    arg: {
+                        email,
+                        password,
+                    },
                 });
 
                 setToken(token);
-
                 localStorage.setItem(JWT_TOKEN_KEY, token);
 
                 return true;

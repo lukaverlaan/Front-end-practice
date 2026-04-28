@@ -2,13 +2,20 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* 🎨 Delaware color variables */
+:root {
+  --primary: #e1251b;
+  --primary-hover: #c81f16;
+}
+
 @layer base {
   body {
-    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
+    @apply bg-[#f5f6f7] dark:bg-[#0f1419] text-gray-800 dark:text-gray-100;
     min-height: 100vh;
   }
+
   h1 {
-    @apply text-4xl mb-4;
+    @apply text-4xl mb-4 font-semibold tracking-tight;
   }
 
   input,
@@ -28,10 +35,23 @@
 
 @layer components {
   .primary {
-    @apply bg-blue-500 text-white font-medium py-2 px-4 rounded;
+    @apply bg-(--primary) text-white font-medium py-2 px-4 rounded
+           hover:bg-(--primary-hover) transition;
   }
+
   .secondary {
-    @apply py-2 px-4 rounded text-blue-500 
-      border border-blue-500 bg-white dark:bg-gray-900;
+    @apply py-2 px-4 rounded text-(--primary)
+           border border-(--primary) bg-transparent 
+           hover:bg-red-50 dark:hover:bg-red-900/20 transition;
+  }
+
+  .link {
+    @apply text-(--primary) hover:underline;
+  }
+
+  .card {
+    @apply p-5 rounded-xl bg-white dark:bg-[#11161c]
+           border border-gray-200 dark:border-gray-800
+           hover:shadow-sm transition;
   }
 }

@@ -22,8 +22,8 @@ export default function Login() {
 
     const methods = useForm({
         defaultValues: {
-            email: 'thomas.aelbrecht@hogent.be',
-            password: '12345678',
+            email: 'admin@delaware.pro',
+            password: 'Admin123*',
         },
     });
     const { handleSubmit, reset } = methods;
